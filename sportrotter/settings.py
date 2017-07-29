@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'authentication',
+    'payments',
     'phonenumber_field'
 ]
 

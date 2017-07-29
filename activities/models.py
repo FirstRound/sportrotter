@@ -47,31 +47,13 @@ class Booking(models.Model):
     date = models.DateField()
 
 
-# TODO move payments to a separate app
-class Payment(models.Model):
-    class PaymentStatus:
-        NOT_DONE = 'NOT_DONE'
-        WAITING_FOR_CONFIRMATION = 'WAITING_FOR_CONFIRMATION'
-        SUCCESSFUL = 'SUCCESSFUL'
-        PAYMENT_STATUS_CHOICES = (
-            (NOT_DONE, 'Not done'),
-            (WAITING_FOR_CONFIRMATION, 'Waiting for confirmation'),
-            (SUCCESSFUL, 'Successful')
-        )
-
-    amount = models.DecimalField(decimal_places=2, max_digits=7)
-    status = models.CharField(max_length=20,
-                              choices=PaymentStatus.PAYMENT_STATUS_CHOICES,
-                              default=PaymentStatus.NOT_DONE, blank=True)
-
-
 class ClientRegistration(models.Model):
     client = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='registrations')
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE,
                                 related_name='registrations')
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
+    payment = models.OneToOneField('payments.Payment', on_delete=models.CASCADE)
 
 
 class Testimonial(models.Model):
