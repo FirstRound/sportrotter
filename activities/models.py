@@ -64,14 +64,3 @@ class Testimonial(models.Model):
                                related_name='testimonials')
     message = models.CharField(max_length=255)
     rating = models.FloatField()
-
-
-# TODO move messaging to a separate app
-class Message(models.Model):
-    text = models.TextField()
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE,
-                               related_name='outgoing_messages')
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                  on_delete=models.CASCADE,
-                                  related_name='incoming_messages')
