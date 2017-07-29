@@ -2,9 +2,9 @@ from rest_framework import generics, filters, permissions
 
 from activities.models import Activity, ActivityRegistration
 from activities.serializers import ActivitySerializer, \
-    SportrotterUserSerializer, \
     ActivityRegistrationSerializer
 from authentication.models import SportrotterUser
+from authentication.serializers import SportrotterUserSerializer
 
 
 class ActivityList(generics.ListCreateAPIView):
