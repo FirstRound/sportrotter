@@ -34,7 +34,7 @@ class Activity(models.Model):
     # TODO WTF is this? handle logic
     max_bookings_per_day = models.IntegerField(default=1, blank=True)
     # TODO add available dates
-
+    stuff_to_take = models.CharField(max_length=255, blank=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 related_name='created_activities',
                                 on_delete=models.CASCADE, default=None)
