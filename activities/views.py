@@ -1,8 +1,7 @@
 from rest_framework import generics, filters, permissions
 
-from activities.models import Activity, ActivityRegistration
-from activities.serializers import ActivitySerializer, \
-    ActivityRegistrationSerializer
+from activities.models import Activity
+from activities.serializers import ActivitySerializer
 from authentication.models import SportrotterUser
 from authentication.serializers import SportrotterUserSerializer
 
@@ -61,23 +60,23 @@ class UserDetail(generics.ListCreateAPIView):
     serializer_class = SportrotterUserSerializer
 
 
-class ActivityRegistrationList(generics.ListAPIView):
-    view_name = 'registration-list'
-    queryset = ActivityRegistration.objects.all()
-    serializer_class = ActivityRegistrationSerializer
+# class ActivityRegistrationList(generics.ListAPIView):
+#     view_name = 'registration-list'
+#     queryset = ActivityRegistration.objects.all()
+#     serializer_class = ActivityRegistrationSerializer
+#
+#     def filter_queryset(self, queryset):
+#         username = self.request.user.username
+#         return queryset.filter(users__username__icontains=username)
+#
+#
+# class ActivityRegistrationDetail(generics.ListCreateAPIView):
+#     view_name = 'registration-detail'
+#     queryset = ActivityRegistration.objects.all()
+#     serializer_class = ActivityRegistrationSerializer
 
-    def filter_queryset(self, queryset):
-        username = self.request.user.username
-        return queryset.filter(users__username__icontains=username)
 
-
-class ActivityRegistrationDetail(generics.ListCreateAPIView):
-    view_name = 'registration-detail'
-    queryset = ActivityRegistration.objects.all()
-    serializer_class = ActivityRegistrationSerializer
-
-
-class Me(generics.ListCreateAPIView):
+class Me(generics.RetrieveAPIView):
     queryset = SportrotterUser.objects.all()
     serializer_class = SportrotterUserSerializer
 

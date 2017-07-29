@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from activities.models import Activity, Location, \
-    ActivityRegistration
+from activities.models import Activity, Location
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -28,13 +27,12 @@ class ActivitySerializer(serializers.ModelSerializer):
         exclude = ('id',)
         # depth = 1
 
-
-class ActivityRegistrationSerializer(serializers.ModelSerializer):
-    activity = ActivitySerializer(read_only=True)
-    users = serializers.HyperlinkedRelatedField(many=True,
-                                                view_name='user-detail',
-                                                read_only=True)
-
-    class Meta:
-        model = ActivityRegistration
-        fields = ('users', 'activity')
+# class ActivityRegistrationSerializer(serializers.ModelSerializer):
+#     activity = ActivitySerializer(read_only=True)
+#     users = serializers.HyperlinkedRelatedField(many=True,
+#                                                 view_name='user-detail',
+#                                                 read_only=True)
+#
+#     class Meta:
+#         model = ActivityRegistration
+#         fields = ('users', 'activity')

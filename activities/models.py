@@ -30,11 +30,11 @@ class Activity(models.Model):
         Location,
         on_delete=models.CASCADE,
     )
-    title = models.CharField(max_length=50)
-    rules_of_security = models.CharField(max_length=255)
+    title = models.CharField(max_length=50, blank=True)
+    rules_of_security = models.CharField(max_length=255, blank=True)
     description = models.TextField()
     # TODO WTF is this? handle logic
-    max_bookings_per_day = models.IntegerField()
+    max_bookings_per_day = models.IntegerField(default=1, blank=True)
     # TODO add available dates
 
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -42,12 +42,36 @@ class Activity(models.Model):
                                 on_delete=models.CASCADE, default=None)
 
 
-class ActivityRegistration(models.Model):
-    # TODO add payments
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE,
-                                 related_name='registrations')
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                   related_name='registrations')
+class Booking(models.Model):
+    activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
+    date = models.DateField()
+
+
+# TODO move payments to a separate app
+class Payment(models.Model):
+    class PaymentStatus:
+        NOT_DONE = 'NOT_DONE'
+        WAITING_FOR_CONFIRMATION = 'WAITING_FOR_CONFIRMATION'
+        SUCCESSFUL = 'SUCCESSFUL'
+        PAYMENT_STATUS_CHOICES = (
+            (NOT_DONE, 'Not done'),
+            (WAITING_FOR_CONFIRMATION, 'Waiting for confirmation'),
+            (SUCCESSFUL, 'Successful')
+        )
+
+    amount = models.DecimalField(decimal_places=2, max_digits=7)
+    status = models.CharField(max_length=20,
+                              choices=PaymentStatus.PAYMENT_STATUS_CHOICES,
+                              default=PaymentStatus.NOT_DONE, blank=True)
+
+
+class ClientRegistration(models.Model):
+    client = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                               related_name='registrations')
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE,
+                                related_name='registrations')
+    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
 
 
 class Testimonial(models.Model):
@@ -69,11 +93,3 @@ class Message(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   on_delete=models.CASCADE,
                                   related_name='incoming_messages')
-
-
-# TODO move payments to a separate app
-class Payment(models.Model):
-    activity_registration = models.ForeignKey(ActivityRegistration,
-                                              on_delete=models.CASCADE,
-                                              related_name='payments')
-    amount = models.DecimalField(decimal_places=2, max_digits=7)
