@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'authentication',
     'payments',
-    'messages',
+    'messaging',
     'phonenumber_field'
 ]
 
