@@ -16,8 +16,6 @@ class Activity(models.Model):
     ACTIVITY_TYPE_CHOICES = (
         (SURFING, 'Surfing'),
     )
-    # TODO add address
-    # address = AddressField(related_name="+", blank=True)
     address = models.CharField(max_length=50)
     activity_type = models.CharField(max_length=20,
                                      choices=ACTIVITY_TYPE_CHOICES,
