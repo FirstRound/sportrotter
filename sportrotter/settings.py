@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'address',
     'rest_framework.authtoken',
     'django_filters',
-    'authentication'
+    'authentication',
+    'phonenumber_field'
 ]
 
 MIDDLEWARE = [
@@ -180,3 +181,5 @@ LOGGING = {
 
     }
 }
+
+PHONENUMBER_DB_FORMAT = 'E164'
