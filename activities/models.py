@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -31,7 +30,13 @@ class Activity(models.Model):
         Location,
         on_delete=models.CASCADE,
     )
+    title = models.CharField(max_length=50)
+    rules_of_security = models.CharField(max_length=255)
     description = models.TextField()
+    # TODO WTF is this? handle logic
+    max_bookings_per_day = models.IntegerField()
+    # TODO add available dates
+
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 related_name='created_activities',
                                 on_delete=models.CASCADE, default=None)
@@ -45,10 +50,14 @@ class ActivityRegistration(models.Model):
                                    related_name='registrations')
 
 
-class Feedback(models.Model):
+class Testimonial(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE,
-                                 related_name='feedbacks')
-    text = models.TextField()
+                                 related_name='testimonials')
+    issuer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                               related_name='testimonials')
+    message = models.CharField(max_length=255)
+    rating = models.FloatField()
 
 
 # TODO move messaging to a separate app
@@ -68,4 +77,3 @@ class Payment(models.Model):
                                               on_delete=models.CASCADE,
                                               related_name='payments')
     amount = models.DecimalField(decimal_places=2, max_digits=7)
-

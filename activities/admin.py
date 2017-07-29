@@ -6,6 +6,6 @@ from .models import *
 
 admin.site.register(Activity)
 admin.site.register(Location)
-admin.site.register(Feedback)
+admin.site.register(Testimonial)
 admin.site.register(ActivityRegistration)
 # admin.site.register(SportrotterUser, UserAdmin)
