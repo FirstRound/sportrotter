@@ -11,7 +11,6 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class ActivitySerializer(serializers.ModelSerializer):
     creator = serializers.ReadOnlyField(source="creator.username")
-    # TODO address
     location = LocationSerializer()
     feedbacks = serializers.HyperlinkedRelatedField(
         many=True, view_name='feedback-detail', read_only=True)
