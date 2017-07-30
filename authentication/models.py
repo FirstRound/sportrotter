@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import UserManager
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -56,7 +57,18 @@ class GalleryItem(models.Model):
                                      related_name='gallery')
 
 
+class Manager(UserManager):
+    def create_user(self, email=None, password=None,
+                    **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+
 class SportrotterUser(AbstractBaseUser):
+    objects = Manager()
     avatar_url = models.CharField(max_length=255, blank=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)

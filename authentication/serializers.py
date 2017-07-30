@@ -14,15 +14,18 @@ class SportrotterUserSerializer(serializers.ModelSerializer):
     registrations = serializers.HyperlinkedRelatedField(
         many=True, view_name='registration-detail', read_only=True)
     professional = ProfessionalSerializer()
+    password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
         professional_data = validated_data.pop('professional')
         professional = Professional.objects.create(**professional_data)
-        user = SportrotterUser(professional=professional, **validated_data)
+        user = SportrotterUser.objects.create_user(
+            professional=professional,
+            **validated_data)
         return user
 
     class Meta:
         model = SportrotterUser
-        fields = ('first_name', 'last_name',
+        fields = ('first_name', 'last_name', 'password',
                   'email', 'registrations', 'avatar_url',
                   'gender', 'professional')
