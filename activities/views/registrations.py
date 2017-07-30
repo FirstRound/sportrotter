@@ -1,17 +1,3 @@
-# class ActivityRegistrationList(generics.ListAPIView):
-#     view_name = 'registration-list'
-#     queryset = ActivityRegistration.objects.all()
-#     serializer_class = ActivityRegistrationSerializer
-#
-#     def filter_queryset(self, queryset):
-#         username = self.request.user.username
-#         return queryset.filter(users__username__icontains=username)
-#
-#
-# class ActivityRegistrationDetail(generics.ListCreateAPIView):
-#     view_name = 'registration-detail'
-#     queryset = ActivityRegistration.objects.all()
-#     serializer_class = ActivityRegistrationSerializer
 from rest_framework import generics
 
 from activities.models import Booking

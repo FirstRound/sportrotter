@@ -4,6 +4,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from activities.models import Activity, Location, Booking, ClientRegistration
 from authentication.models import SportrotterUser
 from payments.models import Payment
+from payments.urls import app_name as payments_app
 from payments.views import PaymentDetail
 
 
@@ -17,12 +18,8 @@ class ActivitySerializer(serializers.ModelSerializer):
     creator = serializers.ReadOnlyField(source="creator.username")
     location = LocationSerializer()
     testimonials = serializers.HyperlinkedRelatedField(
-        many=True, view_name='tesimonial-detail', read_only=True)
+        many=True, view_name='testimonial-detail', read_only=True)
 
-    # def create(self, validated_data):
-    #     super().create(validated_data)
-    #     # create and set nested entities from validated_data
-    #     pass
     def create(self, validated_data):
         location_data = validated_data.pop('location')
         location = Location.objects.create(**location_data)
@@ -39,9 +36,9 @@ class ActivitySerializer(serializers.ModelSerializer):
 class ClientRegistrationSerializer(serializers.ModelSerializer):
     client = serializers.PrimaryKeyRelatedField(
         queryset=SportrotterUser.objects.all())
-    # TODO can't resolve
     payment = serializers.HyperlinkedRelatedField(
-        view_name=PaymentDetail.view_name, read_only=True)
+        view_name='{}:{}'.format(payments_app, PaymentDetail.view_name),
+        read_only=True)
 
     class Meta:
         model = ClientRegistration
@@ -63,18 +60,9 @@ class BookingSerializer(serializers.ModelSerializer):
                                          date=validated_data.pop('date'))
         for registration in registrations:
             client = registration.get('client')
+            # TODO fill in with proper amount?
             ClientRegistration.objects.create(booking=booking,
                                               client=client,
                                               payment=Payment.objects.create(
                                                   amount=100))
         return booking
-
-# class ActivityRegistrationSerializer(serializers.ModelSerializer):
-#     activity = ActivitySerializer(read_only=True)
-#     users = serializers.HyperlinkedRelatedField(many=True,
-#                                                 view_name='user-detail',
-#                                                 read_only=True)
-#
-#     class Meta:
-#         model = ActivityRegistration
-#         fields = ('users', 'activity')

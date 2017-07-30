@@ -51,7 +51,8 @@ class ClientRegistration(models.Model):
                                related_name='registrations')
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE,
                                 related_name='registrations')
-    payment = models.OneToOneField('payments.Payment', on_delete=models.CASCADE)
+    payment = models.OneToOneField('payments.Payment', on_delete=models.CASCADE,
+                                   related_name='registration')
 
 
 class Testimonial(models.Model):
