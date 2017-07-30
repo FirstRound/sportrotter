@@ -9,7 +9,9 @@ urlpatterns = [
     url(r'^users/$', views.UserList.as_view(), name=views.UserList.view_name),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view(),
         name=views.UserDetail.view_name),
+    url(r'^upload/$', views.FileUpload.as_view()),
     url(r'^me/$', views.Me.as_view()),
+
     # url(r'^activity_registrations/$', views.ActivityRegistrationList.as_view(),
     #     name=views.ActivityRegistrationList.view_name),
     # url(r'^activity_registrations/(?P<pk>[0-9]+)/$',

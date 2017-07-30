@@ -22,8 +22,8 @@ class Activity(models.Model):
                                      default=SURFING, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     rating = models.FloatField()
-    background = models.FileField(upload_to='backgrounds')
-    logo = models.FileField(upload_to='logos')
+    background_url = models.CharField(max_length=255, blank=True)
+    logo_url = models.CharField(max_length=255, blank=True)
     location = models.OneToOneField(
         Location,
         on_delete=models.CASCADE,

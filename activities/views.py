@@ -1,5 +1,11 @@
-from rest_framework import generics, filters, permissions
+from django.http import JsonResponse
+from django.views import View
+from rest_framework import generics, filters, permissions, status
+from rest_framework.decorators import detail_route, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
 
+from activities import utils
 from activities.models import Activity
 from activities.serializers import ActivitySerializer
 from authentication.models import SportrotterUser
@@ -42,6 +48,19 @@ class UserViewPermissions(permissions.IsAuthenticated):
             return super().has_permission(request, view)
 
 
+class FileUpload(View):
+    def post(self, request, *args, **kwargs):
+        uploaded_file = request.FILES['file']
+        ext = uploaded_file.name.split('.')[-1]
+        file_path, file_url = utils.make_new_path(ext=ext)
+
+        with open(file_path, 'wb') as runner_file:
+            for chunk in uploaded_file.chunks():
+                runner_file.write(chunk)
+        return JsonResponse(status=status.HTTP_201_CREATED,
+                            data={'url': file_url})
+
+
 class UserList(generics.ListCreateAPIView):
     view_name = 'user-list'
     queryset = SportrotterUser.objects.all()
@@ -54,7 +73,7 @@ class UserList(generics.ListCreateAPIView):
     #     serializer.save(email=serializer.validated_data['username'])
 
 
-class UserDetail(generics.ListCreateAPIView):
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     view_name = 'user-detail'
     queryset = SportrotterUser.objects.all()
     serializer_class = SportrotterUserSerializer

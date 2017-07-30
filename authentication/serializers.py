@@ -24,5 +24,5 @@ class SportrotterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SportrotterUser
         fields = ('first_name', 'last_name',
-                  'email', 'registrations', 'avatar',
+                  'email', 'registrations', 'avatar_url',
                   'gender', 'professional')

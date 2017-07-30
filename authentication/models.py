@@ -31,7 +31,7 @@ class Grade:
 
 class Professional(models.Model):
     MAX_GALLERY_ITEMS = 5
-    background = models.FileField(upload_to='backgrounds', blank=True)
+    background_url = models.CharField(max_length=255, blank=True)
 
     def save(self, *args, **kwargs):
         if getattr(self, 'gallery').count() == Professional.MAX_GALLERY_ITEMS:
@@ -50,14 +50,14 @@ class Professional(models.Model):
 
 
 class GalleryItem(models.Model):
-    image = models.FileField(upload_to='gallery')
+    image_url = models.CharField(max_length=255, blank=True)
     professional = models.ForeignKey(Professional,
                                      on_delete=models.CASCADE,
                                      related_name='gallery')
 
 
 class SportrotterUser(AbstractBaseUser):
-    avatar = models.FileField(upload_to='avatars', blank=True)
+    avatar_url = models.CharField(max_length=255, blank=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     email = models.EmailField(unique=True)
